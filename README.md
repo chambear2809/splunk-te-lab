@@ -247,9 +247,8 @@ Defines the Enterprise Agent pod configuration with the following key settings:
 - **Resources**: 
   - Memory limit: 3584Mi
   - Memory request: 2000Mi
-- **Environment Variables**:
-  - `TEAGENT_ACCOUNT_TOKEN`: Pulled from the secret
-  - `TEAGENT_INET`: Set to `"4"` for IPv4 only
+> **Note:**  
+> The ThousandEyes Enterprise Agent has relatively high hardware requirements you may need to play with these depending on your environment.
 
 ```yaml
 apiVersion: apps/v1
