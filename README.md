@@ -34,11 +34,28 @@ This repository focuses on **Enterprise Agent** deployment only.
 graph LR
     subgraph k8s["Kubernetes Cluster"]
         secret["Secret<br/>te-creds"]
-        agent["ThousandEyes<br/>Enterprise Agent"]
-        internal["Internal<br/>Services"]
+        agent["ThousandEyes<br/>Enterprise Agent<br/>Pod"]
+        
+        subgraph apps["Application Pods"]
+            api["API Gateway<br/>Pod"]
+            payment["Payment Service<br/>Pod"]
+            auth["Auth Service<br/>Pod"]
+        end
+        
+        subgraph svcs["Services"]
+            api_svc["api-gateway<br/>Service"]
+            payment_svc["payment-svc<br/>Service"]
+            auth_svc["auth-service<br/>Service"]
+        end
+        
+        api_svc --> api
+        payment_svc --> payment
+        auth_svc --> auth
         
         secret -.-> agent
-        agent --> internal
+        agent -->|"HTTP Tests"| api_svc
+        agent -->|"HTTP Tests"| payment_svc
+        agent -->|"HTTP Tests"| auth_svc
     end
     
     external["External<br/>Services"]
@@ -74,9 +91,16 @@ graph LR
     user -.-> agent
     
     style k8s fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style apps fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style svcs fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
     style agent fill:#ffeb3b,stroke:#f57c00,stroke-width:2px
     style secret fill:#ffcdd2,stroke:#c62828,stroke-width:2px
-    style internal fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px
+    style api fill:#e1bee7,stroke:#7b1fa2,stroke-width:1px
+    style payment fill:#e1bee7,stroke:#7b1fa2,stroke-width:1px
+    style auth fill:#e1bee7,stroke:#7b1fa2,stroke-width:1px
+    style api_svc fill:#ce93d8,stroke:#7b1fa2,stroke-width:1px
+    style payment_svc fill:#ce93d8,stroke:#7b1fa2,stroke-width:1px
+    style auth_svc fill:#ce93d8,stroke:#7b1fa2,stroke-width:1px
     style external fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
     style te fill:#fff9c4,stroke:#f57f17,stroke-width:2px
     style te_cloud fill:#ffecb3,stroke:#f57f17,stroke-width:2px
