@@ -329,8 +329,6 @@ spec:
 
 Splunk Observability Cloud is a real-time observability platform purpose-built for monitoring metrics, traces, and logs at scale. It ingests OpenTelemetry data and provides advanced dashboards and analytics to help teams detect and resolve performance issues quickly. This guide explains how to integrate ThousandEyes data with Splunk Observability Cloud using OpenTelemetry.
 
-For more information about sending metrics to Splunk Observability Cloud using OpenTelemetry, see [Splunk Observability Cloud: Manage Data](https://docs.splunk.com/observability).
-
 ### Step 1: Create a Splunk Observability Cloud Access Token
 
 To send data to Splunk Observability Cloud, you need an access token. Follow these steps:
@@ -343,8 +341,6 @@ To send data to Splunk Observability Cloud, you need an access token. Follow the
 6. Copy the access token and store it securely
 
 You need the access token to send telemetry data to Splunk Observability Cloud.
-
-For more information, see [Create and manage organization access tokens using Splunk Observability Cloud](https://docs.splunk.com/observability/en/admin/authentication/authentication-tokens/org-tokens.html).
 
 ### Step 2: Create an Integration
 
@@ -368,16 +364,12 @@ To integrate Splunk Observability Cloud with ThousandEyes:
    - `Content-Type: application/x-protobuf`
 9. For **OpenTelemetry Signal**, select **Metric**
 10. For **Data Model Version**, select **v2**
-11. Select a test (For more information on creating a test, see [General Setup Instructions](https://docs.thousandeyes.com/))
+11. Select a test 
 12. Click **Save** to complete the integration setup
 
    ![Integration Complete](media/te2.gif)
 
 You have now successfully integrated your ThousandEyes data with Splunk Observability Cloud.
-
-#### Manage Integrations in the UI
-
-For more information on managing OpenTelemetry integrations, including listing, editing, and deleting integrations, see [Manage Integrations Using the UI - Integrations 1.0](https://docs.thousandeyes.com/).
 
 #### Create an Integration Using the ThousandEyes API
 
