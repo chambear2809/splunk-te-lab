@@ -202,8 +202,6 @@ data:
 
 2. Navigate to **Cloud & Enterprise Agents > Agent Settings > Add New Enterprise Agent**
 
-   ![Get ThousandEyes Token](media/te1.gif)
-
 3. Copy your **Account Group Token**
 
 4. Base64 encode the token:
@@ -298,9 +296,9 @@ spec:
 
 6. Verify in the ThousandEyes dashboard that the agent has registered successfully:
 
-   ![ThousandEyes Agent Registration](media/te2.gif)
-
    Navigate to **Cloud & Enterprise Agents > Agent Settings** to see your newly registered agent
+
+      ![Get ThousandEyes Token](media/te1.gif)
 
 ## Integrating with Splunk Observability Cloud
 
@@ -435,12 +433,12 @@ Since the ThousandEyes Enterprise Agent runs **inside the cluster**, it can dire
 
 ### Benefits of In-Cluster Testing
 
-- ✅ **Internal Service Monitoring**: Test backend services not exposed to the internet
-- ✅ **Service Mesh Awareness**: Monitor services behind Istio, Linkerd, or other service meshes
-- ✅ **DNS Resolution Testing**: Validate Kubernetes DNS and service discovery
-- ✅ **Network Policy Validation**: Ensure network policies allow proper communication
-- ✅ **Latency Baseline**: Measure cluster-internal network performance
-- ✅ **Pre-Production Testing**: Test services before exposing them via Ingress/LoadBalancer
+- **Internal Service Monitoring**: Test backend services not exposed to the internet
+- **Service Mesh Awareness**: Monitor services behind Istio, Linkerd, or other service meshes
+- **DNS Resolution Testing**: Validate Kubernetes DNS and service discovery
+- **Network Policy Validation**: Ensure network policies allow proper communication
+- **Latency Baseline**: Measure cluster-internal network performance
+- **Pre-Production Testing**: Test services before exposing them via Ingress/LoadBalancer
 
 ### Step-by-Step Guide
 
