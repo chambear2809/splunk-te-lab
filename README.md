@@ -486,30 +486,7 @@ If testing services in the same namespace as the ThousandEyes agent, you can use
 - `api-gateway:8080`
 - `payment-svc:8080`
 
-#### 3. Extract Service Information Programmatically
-
-Use this script to generate a list of testable HTTP/HTTPS services:
-
-```bash
-#!/bin/bash
-
-# Get all services with HTTP-like ports (80, 443, 8000-9000)
-kubectl get svc --all-namespaces -o json | \
-  jq -r '.items[] | 
-    select(.spec.ports[]? | .port | 
-    tostring | test("80|443|8[0-9]{3}|9[0-9]{3}")) | 
-    "\(.metadata.name).\(.metadata.namespace).svc.cluster.local:\(.spec.ports[0].port)"'
-```
-
-Example output:
-```
-api-gateway.production.svc.cluster.local:8080
-payment-svc.production.svc.cluster.local:8080
-auth-service.production.svc.cluster.local:9000
-frontend.default.svc.cluster.local:80
-```
-
-#### 4. Create ThousandEyes Tests for Internal Services
+#### 3. Create ThousandEyes Tests for Internal Services
 
 For each service endpoint, create an HTTP Server test in ThousandEyes:
 
@@ -607,61 +584,6 @@ http://redis-exporter.production.svc.cluster.local:9121/metrics
    - Team ownership
 5. **Monitor Test Agent Health**: Ensure the ThousandEyes agent pod is healthy and has sufficient resources
 6. **Correlate with APM**: Create Splunk dashboards that show both synthetic and real user metrics side-by-side
-
-### Automation Script
-
-Here's a complete script to automate test creation for all HTTP services:
-
-```bash path=null start=null
-#!/bin/bash
-
-# Variables
-TE_API_TOKEN="your-thousandeyes-api-token"
-TE_AGENT_ID="your-k8s-agent-id"
-NAMESPACE="production"
-
-# Get all services with HTTP ports
-SERVICES=$(kubectl get svc -n $NAMESPACE -o json | \
-  jq -r '.items[] | 
-    select(.spec.ports[]? | .port | 
-    tostring | test("80|443|8[0-9]{3}")) | 
-    "\(.metadata.name):\(.spec.ports[0].port)"')
-
-# Create tests for each service
-while IFS= read -r service; do
-  SERVICE_NAME=$(echo $service | cut -d':' -f1)
-  SERVICE_PORT=$(echo $service | cut -d':' -f2)
-  TEST_URL="http://${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local:${SERVICE_PORT}/health"
-  
-  echo "Creating test for: $TEST_URL"
-  
-  curl -X POST https://api.thousandeyes.com/v6/tests/http-server/new \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $TE_API_TOKEN" \
-    -d "{
-      \"testName\": \"[K8s] ${SERVICE_NAME} Health\",
-      \"url\": \"${TEST_URL}\",
-      \"interval\": 120,
-      \"agents\": [{\"agentId\": \"${TE_AGENT_ID}\"}],
-      \"alertsEnabled\": 1
-    }"
-  
-  echo "Test created for $SERVICE_NAME"
-done <<< "$SERVICES"
-```
-
-### Comparison: AppDynamics vs ThousandEyes + Splunk
-
-| Feature | AppDynamics | ThousandEyes + Splunk O11y |
-|---------|-------------|-----------------------------|
-| **Automatic Test Discovery** | ✅ Built-in | ⚙️ Manual with `kubectl` scripting |
-| **In-Cluster Testing** | ✅ Yes | ✅ Yes |
-| **External Dependency Testing** | ❌ Limited | ✅ Extensive |
-| **Network Path Visualization** | ❌ Limited | ✅ Advanced (BGP, hop-by-hop) |
-| **APM Correlation** | ✅ Native | ✅ Via Splunk O11y |
-| **Custom Dashboards** | ✅ Yes | ✅ Yes (more flexible in Splunk) |
-| **DNS Resolution Testing** | ❌ Limited | ✅ Advanced |
-| **Multi-Cloud Support** | ✅ Yes | ✅ Yes |
 
 ### Troubleshooting
 
