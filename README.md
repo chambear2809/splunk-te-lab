@@ -1,5 +1,4 @@
 # ThousandEyes and Splunk Observability Lab
-Thousand Eyes Enterprise Agent Deployment in Kubernetes
 
 ## Overview
 
