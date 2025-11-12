@@ -321,6 +321,7 @@ spec:
    Navigate to **Cloud & Enterprise Agents > Agent Settings** to see your newly registered agent
 
       ![Get ThousandEyes Token](media/te1.gif)
+      ![Agent in GUI](media/1.png)
 
 ## Integrating with Splunk Observability Cloud
 
