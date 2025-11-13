@@ -123,7 +123,9 @@ graph LR
   - Hostname: `te-agent-aleccham` (customizable)
   - Security capabilities: `NET_ADMIN`, `SYS_ADMIN` (required for network testing)
   - Memory allocation: 2GB request, 3.5GB limit
-  - Network mode: IPv4 only
+  - Network mode: IPv4 only (configured via `TEAGENT_INET: "4"` environment variable)
+  - Image pull policy: `Always` (ensures latest image is pulled)
+  - Init command: `/sbin/my_init` (required for proper agent initialization)
 - **Internal Services**: Kubernetes workloads including REST APIs, microservices, databases, and gRPC services
 
 #### 2. Test Targets
@@ -256,14 +258,25 @@ kind: Deployment
 metadata:
   namespace: te-demo
   name: thousandeyes
+  labels:
+    app: thousandeyes
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: thousandeyes
   template:
+    metadata:
+      labels:
+        app: thousandeyes
     spec:
       hostname: te-agent-aleccham
       containers:
       - name: thousandeyes
         image: 'thousandeyes/enterprise-agent:latest'
+        imagePullPolicy: Always
+        command:
+          - /sbin/my_init
         securityContext:
           capabilities:
             add:
@@ -275,10 +288,20 @@ spec:
               secretKeyRef:
                 name: te-creds
                 key: TEAGENT_ACCOUNT_TOKEN
+          - name: TEAGENT_INET
+            value: "4"
+        resources:
+          limits:
+            memory: 3584Mi
+          requests:
+            memory: 2000Mi
 ```
 
 **Important notes:**
 - The agent requires elevated privileges (`NET_ADMIN`, `SYS_ADMIN`) to perform network tests
+- The `TEAGENT_INET: "4"` environment variable forces IPv4-only mode (required for some network configurations)
+- The `/sbin/my_init` command is required for proper agent initialization and service management
+- The `imagePullPolicy: Always` ensures you always pull the latest image version
 - Adjust the `hostname` field to uniquely identify your agent in the ThousandEyes dashboard
 - Modify the `namespace` to match your Kubernetes environment
 
@@ -314,7 +337,7 @@ spec:
 5. Check the logs to ensure the agent is connecting:
 
    ```bash
-   kubectl logs -n te-demo -l app=thoudsandeyes
+   kubectl logs -n te-demo -l app=thousandeyes
    ```
 
 6. Verify in the ThousandEyes dashboard that the agent has registered successfully:

@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
   namespace: te-demo
   name: thousandeyes
   labels:
-    app: thoudsandeyes
+    app: thousandeyes
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: thoudsandeyes
+      app: thousandeyes
   template:
     metadata:
       labels:
-        app: thoudsandeyes
+        app: thousandeyes
     spec:
       hostname: te-agent-aleccham
       containers:
@@ -41,5 +40,4 @@ spec:
                memory: 3584Mi
              requests:
                memory: 2000Mi
-      restartPolicy: Always
 
