@@ -1,5 +1,4 @@
 # ThousandEyes and Splunk Observability Lab
-Thousand Eyes Enterprise Agent Deployment in Kubernetes
 
 ## Overview
 
@@ -345,6 +344,7 @@ spec:
    Navigate to **Cloud & Enterprise Agents > Agent Settings** to see your newly registered agent
 
       ![Get ThousandEyes Token](media/te1.gif)
+      ![Agent in GUI](media/1.png)
 
 ## Integrating with Splunk Observability Cloud
 
@@ -489,19 +489,19 @@ List all services in your cluster or a specific namespace:
 kubectl get svc --all-namespaces
 
 # Get services in a specific namespace
-kubectl get svc -n production
+kubectl get svc -n te-demo
 
 # Get services with detailed output including ports
-kubectl get svc -n production -o wide
+kubectl get svc -n te-demo -o wide
 ```
 
 Example output:
 ```
 NAMESPACE    NAME           TYPE        CLUSTER-IP      PORT(S)    AGE
-production   api-gateway    ClusterIP   10.96.100.50    8080/TCP   5d
-production   payment-svc    ClusterIP   10.96.100.51    8080/TCP   5d
-production   auth-service   ClusterIP   10.96.100.52    9000/TCP   5d
-production   postgres       ClusterIP   10.96.100.53    5432/TCP   5d
+te-demo      api-gateway    ClusterIP   10.96.100.50    8080/TCP   5d
+te-demo      payment-svc    ClusterIP   10.96.100.51    8080/TCP   5d
+te-demo      auth-service   ClusterIP   10.96.100.52    9000/TCP   5d
+te-demo      postgres       ClusterIP   10.96.100.53    5432/TCP   5d
 ```
 
 #### 2. Build Test Hostnames
@@ -637,10 +637,10 @@ kubectl logs -n kube-system -l k8s-app=kube-dns
 
 ```bash
 # Verify service endpoints exist
-kubectl get endpoints -n production api-gateway
+kubectl get endpoints -n te-demo api-gateway
 
 # Check if pods are ready
-kubectl get pods -n production -l app=api-gateway
+kubectl get pods -n te-demo -l app=api-gateway
 
 # Test connectivity from agent pod
 kubectl exec -n te-demo -it <pod-name> -- curl -v http://api-gateway.production.svc.cluster.local:8080/health
@@ -650,10 +650,10 @@ kubectl exec -n te-demo -it <pod-name> -- curl -v http://api-gateway.production.
 
 ```bash
 # List network policies
-kubectl get networkpolicies -n production
+kubectl get networkpolicies -n te-demo
 
 # Describe network policy
-kubectl describe networkpolicy <policy-name> -n production
+kubectl describe networkpolicy <policy-name> -n te-demo
 
 # If needed, add policy to allow traffic from te-demo namespace
 ```
